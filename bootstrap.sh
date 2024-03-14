@@ -15,6 +15,12 @@ Address = 10.16.0.1
 ListenPort = 51820
 PrivateKey $PRIV
 SaveConfig = true
+PostUp = iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE
+PostUp = ip6tables -t nat -I POSTROUTING -o eth0 -j MASQUERADE
+PreDown = ufw route delete allow in on wg0 out on eth0
+PreDown = iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+PreDown = ip6tables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+
 EOF
 
 echo "CREATE 1. CLIENT PRIVATE KEY"
